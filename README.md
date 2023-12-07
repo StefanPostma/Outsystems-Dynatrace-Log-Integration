@@ -1,1 +1,96 @@
-# Outsystems-Dynatrace-Log-Intergration
+# Outsystems Dynatrace Log Intergration
+
+## About 📑
+This repository contains templates to provide better and faster insights on top of [OutSystems](https://www.outsystems.com/) monitoring data.
+
+These templates are seperated into :
+- **Logstash pipelines**
+    - Simplify the ETL of monitoring data from the OutSystems platform.
+    - Enrich data to allow building more human-readable visualizations.
+    - - See it at [data_storing-elasticsearch](data_storing-elasticsearch)
+- **Dynatrace dashboards**
+    - Provide an out-of-the-box set of visualizations that help understand OutSystems applications and platform health, based on their performance and errors.
+    - Reduce time to insights (based on OutSystems monitoring data).
+    - Improve troubleshooting capabilities.
+
+<br>
+
+Example of one of the visualizations available on this repository:
+![OutSystems_Queries_Dashboard](docs/images/OutSystems_Queries_Dashboard.png)
+
+<br>
+
+:exclamation: To know how to set up and use this repository artifacts you can go directly to the this section [How to use the contents of this repository](#how-to-use-the-contents-of-this-repository)
+
+:exclamation: **Want to support to implement or extend this assets?**
+Contact OutSystems Professional Services. You can know more about us at:
+https://www.outsystems.com/success-services/professional-services/ 
+  
+<br>
+
+## Goal 🎯
+The major goal of these accelerators is to provide OutSystems customers with an out-of-the-box solution to:
+- Easily **observe the OutSystems monitoring data on Elastic with more advanced visualizations**, compared to the ones from the built-in tools of the OutSystems platform.
+- Easily search through OutSystems monitoring data, in particular through the OutSystems logs with:
+    - Free text search.
+    - Selection of visible information.
+- **Do more advanced monitoring**, compared to what can be done using the built-in tools of the OutSystems platform. Things like:
+    - Build alerts for an OutSystems environment or OutSystems Factory.
+    - Leverage Elastic analytic capabilities to have deeper insights on performance and behavior of applications, and the platform itself.
+- **Observe OutSystems applications performance and errors through time**.
+    - Quickly pinpoint performance bottlenecks, areas to improve, etc.
+    - Figure out what is affecting performance:
+        - Slow Queries
+        - Slow Integrations
+        - Slow Extensions
+- Provide an example of how to **set up and monitor SLOs**.
+
+<br> 
+
+## Examples of metrics can you measure
+
+## REPLACE THIS PArt with DT extension
+
+Here are some examples of OutSystems metrics that can be monitored using these accelerators:
+- **Request Time Duration** (for each request):
+    - Client Time (load time)
+    - Server Time, which can be decomposed into:
+        - SAT (Session Acquisition Time)
+        - Query Execution Time
+        - Integration Execution Time
+        - Extension Execution Time
+- **Server side performance metrics**
+    - Session size
+    - Viewstate size
+    - Number of slow queries
+    - Number of slow integrations
+    - Number of slow extensions
+- **Errors metrics**
+    - Number of errors
+    - Number of errors by type
+
+> These metrics are the ones that **OutSystems Professional Services Experts** teams consider to be a starting point to understand applications and platform performance.
+
+> As stated, these are just examples of some metrics that can be monitored, based on the platform data.
+
+<br>
+
+## How to use the contents of this repository
+If you have do not have a Dynatrace environment yet, you can start a free trial today
+- [Open a Dynatrace trial](https://www.dynatrace.com/trial).
+
+If you are good with setting up the Elastic stack, and you want to know how to use these accelerators, check the following documents (with the following order):
+1.0 [How to use the Logstash accelerators](data_extraction/logstash/README.md).
+
+
+If you want to explore more deeply what you can take out of the OutSystems monitoring data, you can refer to:
+- [How to access OutSystems monitoring data to begin with](docs/Access-Monitoring-Data.md).
+- [Understand OutSystems monitoring data](docs/Monitoring-Data.md).
+- [Baseline metrics that OutSystems recommends to use](https://docs.google.com/spreadsheets/d/1tWQMsnxKUEGjk7-UrdKUu4X5U1koqo_M__wiigtt7g4/edit?usp=sharing)
+  - Some of these metrics are built on top of OutSystems monitoring data (logs, request events, etc)
+
+<br>
+
+
+## Change log
+See the change log to learn about the latest changes and improvements to this repository.
