@@ -80,8 +80,9 @@ Here are some examples of OutSystems metrics that can be monitored using these a
 If you have do not have a Dynatrace environment yet, you can start a free trial today
 - [Open a Dynatrace trial](https://www.dynatrace.com/trial).
 
-If you are good with setting up the Elastic stack, and you want to know how to use these accelerators, check the following documents (with the following order):
-1.0 [How to use the Logstash accelerators](data_extraction/logstash/README.md).
+If you are all set with your Dynatrace environment you can start following these steps
+1.0 [Installing Logstash](data_extraction/README.md).
+2.0 [Configure Logstash](data_extraction/Logstash/README.md).
 
 
 If you want to explore more deeply what you can take out of the OutSystems monitoring data, you can refer to:
