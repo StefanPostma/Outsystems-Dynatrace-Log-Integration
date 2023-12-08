@@ -7,7 +7,6 @@ These templates are seperated into :
 - **Logstash pipelines**
     - Simplify the ETL of monitoring data from the OutSystems platform.
     - Enrich data to allow building more human-readable visualizations.
-    - - See it at [data_storing-elasticsearch](data_storing-elasticsearch)
 - **Dynatrace dashboards**
     - Provide an out-of-the-box set of visualizations that help understand OutSystems applications and platform health, based on their performance and errors.
     - Reduce time to insights (based on OutSystems monitoring data).
@@ -16,27 +15,29 @@ These templates are seperated into :
 <br>
 
 Example of one of the visualizations available on this repository:
-![OutSystems_Queries_Dashboard](docs/images/OutSystems_Queries_Dashboard.png)
+![examples](Dashboards/images/)
 
 <br>
 
 :exclamation: To know how to set up and use this repository artifacts you can go directly to the this section [How to use the contents of this repository](#how-to-use-the-contents-of-this-repository)
 
 :exclamation: **Want to support to implement or extend this assets?**
-Contact OutSystems Professional Services. You can know more about us at:
-https://www.outsystems.com/success-services/professional-services/ 
+Contact Dynatrace Professional Services. You can know more about us at:
+https://www.dynatrace.com/services-support/#dynatrace-services/ 
   
 <br>
 
 ## Goal 🎯
 The major goal of these accelerators is to provide OutSystems customers with an out-of-the-box solution to:
-- Easily **observe the OutSystems monitoring data on Elastic with more advanced visualizations**, compared to the ones from the built-in tools of the OutSystems platform.
-- Easily search through OutSystems monitoring data, in particular through the OutSystems logs with:
-    - Free text search.
-    - Selection of visible information.
+- Easily **observe the OutSystems monitoring data on Dynatrace with more advanced visualizations, Unified Observability and Easy automation**, compared to the cababilites from the built-in tools of the OutSystems platform.
+- Easily search through OutSystems monitoring data, in particular through the OutSystems logs with Dynatrace Query Lanquage (DQL)
+- Retain logs for up to 10 Years
 - **Do more advanced monitoring**, compared to what can be done using the built-in tools of the OutSystems platform. Things like:
     - Build alerts for an OutSystems environment or OutSystems Factory.
-    - Leverage Elastic analytic capabilities to have deeper insights on performance and behavior of applications, and the platform itself.
+    - Leverage Dynatrace Davis AI capabilities to have deeper insights on performance and behavior of applications, and the platform itself.
+    - Build quality gates with Dynatrace Site Reliabilty Guardians
+    - Start automating releases driven by Dynatrace workflows
+    - Intergrate log data with Outsystems applications by levering Workflow API's
 - **Observe OutSystems applications performance and errors through time**.
     - Quickly pinpoint performance bottlenecks, areas to improve, etc.
     - Figure out what is affecting performance:
