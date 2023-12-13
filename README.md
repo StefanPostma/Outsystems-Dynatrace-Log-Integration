@@ -1,4 +1,4 @@
-# Outsystems Dynatrace Log Intergration
+# Outsystems Dynatrace Log Integration
 
 ## About 📑
 This repository contains templates to provide better and faster insights on top of [OutSystems](https://www.outsystems.com/) monitoring data.
