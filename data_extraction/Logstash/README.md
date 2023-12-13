@@ -72,4 +72,4 @@ Copy the [pattern file](/data_extraction/Logstash/patterns) from this Repro to t
 <br>
 
 
-> for step 7 You'll need to restart the Logstash service for these changes to take effect.
+> don't forget step 7, You'll need to (re) start the Logstash service for these changes to take effect.
