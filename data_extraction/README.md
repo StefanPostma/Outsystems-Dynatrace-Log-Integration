@@ -4,7 +4,7 @@
 
 With this Logstash configuration you can extract the OutSystems monitoring data by:
 * Pulling data directly from OutSystems DB, in particular from [Log Tables](https://success.outsystems.com/Documentation/11_x_platform/Managing_the_Applications_Lifecycle/Monitor_and_Troubleshoot/Logging_database_and_architecture)
-  * See more at: [Logstash data pipelines/Monitor Probe](Logstash/pipelines/database)
+  * See more at: [Logstash data pipelines/ Database](Logstash/pipelines/database)
 * Pulling data through an OutSystem application that exposes the majority of the data was REST endpoints that then can be consumed.
   * The application it's available in [OutSystems Forge](https://www.outsystems.com/forge/), it's [Monitor Probe](https://www.outsystems.com/forge/component-overview/4559/monitorprobe)
     * See more at: [Logstash data pipelines/Monitor Probe](Logstash/pipelines/monitor-probe)

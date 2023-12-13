@@ -28,9 +28,10 @@ This is possible, for now, using one of 3 ways:
 7. Start the logstash service
 8. Troubleshoot via Logstash logs **/var/log/logstash** if no data is send to DT 
 
+I will not describe steps which are only Linux native commands.
 <br>
 
-## 3 Update the logstash config
+## 3. Update the logstash config
 **Review very carefully** check the standard Logstash config because the default environment variables are in that file, copy these **First** into the template and make the necessary adjustments if needed.
 
 So, if both conditions stated in above **Important Note(s)** section are assured, first and foremost, you need to rename the file [logstash-config.txt](config/logstash-config-template.txt) to:
@@ -41,17 +42,17 @@ example command: `sudo cp logstash-config.txt /etc/default/logstash`
 
 <br>
 
-## 4 Copy the pipeline config file you need
+## 4. Copy the pipeline config file you need
 check the [Pipeline](Logstash/pipelines) folder for the pipeline config you need.
 Check the `/etc/logstash/pipelines.yml` file for the location of your config files.
 Copy the config files to the location.
 <br>
 
-## 5 Edit the pipleline config
+## 5. Edit the pipleline config
 By default Logstash runs the new pipelines in serial order, however you can add multiple pipelines to the config file so they run in parallel  
 but for that you need to edit configuration file `/etc/logstash/pipelines.yml` and add similar lines (adjust according to your setup):
 
-```
+``
 - pipeline.id: devops-dev-error
   path.config: "<logstash_pipelines_folder>/db-error.conf"
 - pipeline.id: devops-dev-extension
@@ -60,7 +61,9 @@ but for that you need to edit configuration file `/etc/logstash/pipelines.yml` a
   path.config: "<logstash_pipelines_folder>/db-integration.conf"
 - pipeline.id: devops-dev-mobile-request
   path.config: "<logstash_pipelines_folder>/db-mobile-request.conf"
-```
+  
+``
+
 where `<logstash_pipelines_folder>` is the folder where you've placed the pipelines from this repository.
 <br>
 
