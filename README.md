@@ -48,11 +48,8 @@ The major goal of these accelerators is to provide OutSystems customers with an 
 
 <br> 
 
-## Examples of metrics can you measure
+## Examples of metrics can you can extract
 
-## REPLACE THIS PArt with DT extension
-
-Here are some examples of OutSystems metrics that can be monitored using these accelerators:
 - **Request Time Duration** (for each request):
     - Client Time (load time)
     - Server Time, which can be decomposed into:
@@ -70,9 +67,7 @@ Here are some examples of OutSystems metrics that can be monitored using these a
     - Number of errors
     - Number of errors by type
 
-> These metrics are the ones that **OutSystems Professional Services Experts** teams consider to be a starting point to understand applications and platform performance.
-
-> As stated, these are just examples of some metrics that can be monitored, based on the platform data.
+These are just examples of some metrics that can be monitored, based on the platform log data.
 
 <br>
 
@@ -85,9 +80,9 @@ If you are all set with your Dynatrace environment you can start following these
 2.0 [Configure Logstash](data_extraction/Logstash/README.md).
 
 
-If you want to explore more deeply what you can take out of the OutSystems monitoring data, you can refer to:
-- [How to access OutSystems monitoring data to begin with](docs/Access-Monitoring-Data.md).
-- [Understand OutSystems monitoring data](docs/Monitoring-Data.md).
+If you want to explore more deeply what you can take out of your OutSystems platform, you can refer to:
+- [How to access OutSystems log data](Documentation/Access-Monitoring-Data.md).
+- [Understanding monitoring data](documentation/Monitoring-Data.md).
 - [Baseline metrics that OutSystems recommends to use](https://docs.google.com/spreadsheets/d/1tWQMsnxKUEGjk7-UrdKUu4X5U1koqo_M__wiigtt7g4/edit?usp=sharing)
   - Some of these metrics are built on top of OutSystems monitoring data (logs, request events, etc)
 
