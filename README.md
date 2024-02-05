@@ -4,7 +4,11 @@
 This repository contains templates to provide better and faster insights on top of [OutSystems](https://www.outsystems.com/) monitoring data.
 
 These templates are seperated into :
+- **Documentation**
+    - Explaination of different ways to [extract data](Documentation/Access-Monitoring-Data.md) out of Outsystems 
+    - Different types of [monitoring data](Documentation/Monitoring-Data.md) provided by Dynatrace Agents and Outsystems 
 - **Logstash pipelines**
+    :exclamation: For Outsystems 11 we advice to use [log streaming](https://success.outsystems.com/documentation/11/managing_the_applications_lifecycle/monitor_and_troubleshoot/introduction_to_log_streaming/) instead of Logstash
     - Simplify the ETL of monitoring data from the OutSystems platform.
     - Enrich data to allow building more human-readable visualizations.
 - **Dynatrace dashboards**
