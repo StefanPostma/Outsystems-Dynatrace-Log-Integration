@@ -19,7 +19,7 @@ These templates are seperated into :
 <br>
 
 Example of one of the visualizations available on this repository:
-![examples](Dashboards/images/)
+![examples](Dashboards/Images)
 
 <br>
 
