@@ -18,8 +18,8 @@ These templates are seperated into :
 
 <br>
 
-Example of one of the visualizations available on this repository:
-![examples](Dashboards/Images)
+Examples of the visualizations available on this repository:
+[Images](Dashboards/Images)
 
 <br>
 
@@ -79,17 +79,15 @@ These are just examples of some metrics that can be monitored, based on the plat
 If you have do not have a Dynatrace environment yet, you can start a free trial today
 - [Open a Dynatrace trial](https://www.dynatrace.com/trial).
 
-If you are all set with your Dynatrace environment you can start following these steps
-1.0 [Installing Logstash](data_extraction/README.md).
-2.0 [Configure Logstash](data_extraction/Logstash/README.md).
+If you are all set with your Dynatrace environment you can start to decide how you want to collect your data.
+[How to access OutSystems log data](Documentation/Access-Monitoring-Data.md).
 
+If you like to proceed with using logstash please follow these steps: <br>
+1.0 [Installing Logstash](data_extraction/README.md). <br>
+2.0 [Configure Logstash](data_extraction/Logstash/README.md) 
 
 If you want to explore more deeply what you can take out of your OutSystems platform, you can refer to:
-- [How to access OutSystems log data](Documentation/Access-Monitoring-Data.md).
 - [Understanding monitoring data](documentation/Monitoring-Data.md).
-- [Baseline metrics that OutSystems recommends to use](https://docs.google.com/spreadsheets/d/1tWQMsnxKUEGjk7-UrdKUu4X5U1koqo_M__wiigtt7g4/edit?usp=sharing)
-  - Some of these metrics are built on top of OutSystems monitoring data (logs, request events, etc)
-
 <br>
 
 
