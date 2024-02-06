@@ -77,10 +77,10 @@ These are just examples of some metrics that can be monitored, based on the plat
 
 ## How to use the contents of this repository
 If you have do not have a Dynatrace environment yet, you can start a free trial today
-- [Open a Dynatrace trial](https://www.dynatrace.com/trial).
+- [Open a Dynatrace trial](https://www.dynatrace.com/trial)
 
 If you are all set with your Dynatrace environment you can start to decide how you want to collect your data.
-[How to access OutSystems log data](Documentation/Access-Monitoring-Data.md).
+- [How to access OutSystems log data](Documentation/Access-Monitoring-Data.md)
 
 If you like to proceed with using logstash please follow these steps: <br>
 1.0 [Installing Logstash](data_extraction/README.md). <br>
@@ -89,7 +89,6 @@ If you like to proceed with using logstash please follow these steps: <br>
 If you want to explore more deeply what you can take out of your OutSystems platform, you can refer to:
 - [Understanding monitoring data](documentation/Monitoring-Data.md).
 <br>
-
 
 ## Change log
 See the change log to learn about the latest changes and improvements to this repository.
