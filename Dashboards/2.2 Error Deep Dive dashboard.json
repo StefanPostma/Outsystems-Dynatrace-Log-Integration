@@ -1,1 +1,76 @@
-{"version":11,"variables":[{"key":"Error_Message","type":"query","input":"fetch logs\n| filter message_type == \"Error\"\n| sort error_message asc\n| summarize collectDistinct(error_message)\n","multiple":true},{"key":"Application","type":"query","input":"fetch logs\n| filterOut application_name == \"\"\n| sort application_name asc\n| summarize collectDistinct(application_name)","multiple":true},{"key":"Environment","type":"query","input":"fetch logs //, scanLimitGBytes: 500, samplingRatio: 1000\n| fieldsAdd strTenant=toString(environment_name)\n| sort strTenant asc\n| summarize collectDistinct(environment_name)","multiple":true}],"tiles":{"0":{"type":"data","title":"","query":"fetch logs //, scanLimitGBytes: 500, samplingRatio: 1000\n| filter contains(message_type, \"Error\")\n| filter in(error_message, $Error_Message)\n| filter in(application_name, $Application)\n| filter in(environment_name, $Environment)\n| fields Timestamp=timestamp, \n  Application=application_name, \n  RequestKey=request_key, \n  Message=content, \n  Stacktrace=stack_trace, \n  Host=server_name, \n  Environment=environment_name, \n  Tag=tags, \n  SessionId=session_id\n| sort Timestamp desc","visualization":"table","visualizationSettings":{"thresholds":[],"chartSettings":{"gapPolicy":"connect","circleChartSettings":{"groupingThresholdType":"absolute"}},"singleValue":{"showLabel":true,"label":"","autoscale":true},"table":{"rowDensity":"condensed","enableLineWrap":true,"enableSparklines":false,"hiddenColumns":[],"lineWrapIds":[["content"]],"columnWidths":{}}}},"1":{"type":"markdown","title":"","content":"### Error raw data\n> Original Outsystems platform logs. Tabel can be filtered by clicking on items"}},"layouts":{"0":{"x":0,"y":3,"w":24,"h":15},"1":{"x":0,"y":0,"w":24,"h":3}}}
+{
+    "version": 11,
+    "variables": [
+        {
+            "key": "Error_Message",
+            "type": "query",
+            "input": "fetch logs\n| filter message_type == \"Error\"\n| sort error_message asc\n| summarize collectDistinct(error_message)\n",
+            "multiple": true
+        },
+        {
+            "key": "Application",
+            "type": "query",
+            "input": "fetch logs\n| filterOut application_name == \"\"\n| sort application_name asc\n| summarize collectDistinct(application_name)",
+            "multiple": true
+        },
+        {
+            "key": "Environment",
+            "type": "query",
+            "input": "fetch logs //, scanLimitGBytes: 500, samplingRatio: 1000\n| fieldsAdd strTenant=toString(environment_name)\n| sort strTenant asc\n| summarize collectDistinct(environment_name)",
+            "multiple": true
+        }
+    ],
+    "tiles": {
+        "0": {
+            "type": "data",
+            "title": "",
+            "query": "fetch logs //, scanLimitGBytes: 500, samplingRatio: 1000\n| filter contains(message_type, \"Error\")\n| filter in(error_message, $Error_Message)\n| filter in(application_name, $Application)\n| filter in(environment_name, $Environment)\n| fields Timestamp=timestamp, \n  Application=application_name, \n  RequestKey=request_key, \n  Message=content, \n  Stacktrace=stack_trace, \n  Host=server_name, \n  Environment=environment_name, \n  Tag=tags, \n  SessionId=session_id\n| sort Timestamp desc",
+            "visualization": "table",
+            "visualizationSettings": {
+                "thresholds": [],
+                "chartSettings": {
+                    "gapPolicy": "connect",
+                    "circleChartSettings": {
+                        "groupingThresholdType": "absolute"
+                    }
+                },
+                "singleValue": {
+                    "showLabel": true,
+                    "label": "",
+                    "autoscale": true
+                },
+                "table": {
+                    "rowDensity": "condensed",
+                    "enableLineWrap": true,
+                    "enableSparklines": false,
+                    "hiddenColumns": [],
+                    "lineWrapIds": [
+                        [
+                            "content"
+                        ]
+                    ],
+                    "columnWidths": {}
+                }
+            }
+        },
+        "1": {
+            "type": "markdown",
+            "title": "",
+            "content": "### Error raw data\n> Original Outsystems platform logs. Tabel can be filtered by clicking on items"
+        }
+    },
+    "layouts": {
+        "0": {
+            "x": 0,
+            "y": 3,
+            "w": 24,
+            "h": 15
+        },
+        "1": {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 3
+        }
+    }
+}

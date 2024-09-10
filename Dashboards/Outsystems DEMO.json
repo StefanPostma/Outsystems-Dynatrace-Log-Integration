@@ -1,1 +1,41 @@
-{"version":11,"variables":[],"tiles":{"0":{"type":"markdown","title":"","content":"![Getting started - step 1](https://dotcontrol.com/media/lmocoiav/outsystems-logo.png)"},"1":{"type":"markdown","title":"","content":"# Getting started with Outsystems monitoring\n\nWe have created ready-made examples for various Outsystems log dashboards. In addition to log monitoring, you can install the Dynatrace OneAgent on the frontend servers to track all [End2End transactions](https://<TENANTID>.apps.dynatrace.com/ui/apps/dynatrace.classic.frontend/#serviceflow;sci=APPLICATION-EA7C4B59F27D43EB;timeframe=custom1701843977582to1701851177582;gtf=-2h;gf=all), including all [DB calls](https://pyw64053.apps.dynatrace.com/ui/apps/dynatrace.classic.databases/ui/databases?gtf=-2h&gf=all&sorting=name%3Basc)\n\n \n * [1.0 Top findings dashboard](https://pyw64053.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/72cbfe82-1c6d-4dd5-8c71-0a9ab151edb3#from=now-24h&to=now&vfilter_Application=Demo_Earth_App%2CDemo_Jupiter_App%2CDemo_Saturn_App&vfilter_Environment=DEMO&vfilter_Tenant=DemoUsers%2CServiceCenter)\n * [2.0 Error trends dashboard](https://pyw64053.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/c49ebeca-3077-40cf-baae-803508696991#from=now-24h&to=now&vfilter_ErrorPattern=400+Bad+Request%3A+The+request+cannot+be+fulfilled+due+to+bad+syntax.%2C404+Not+Found%3A+The+requested+resource+could+not+be+found+on+the+server.%2C500+Internal+Server+Error%3A+An+unexpected+condition+was+encountered%2C+and+no+more+specific+message+is+suitable.%2C503+Service+Unavailable%3A+The+server+is+not+ready+to+handle+the+request.+Common+causes+are+a+server+that+is+down+for+maintenance+or+that+is+overloaded.%2C504+Gateway+Timeout%3A+The+server%2C+while+acting+as+a+gateway+or+proxy%2C+did+not+receive+a+timely+response+from+the+upstream+server+or+some+other+auxiliary+server.&vfilter_Environment=DEMO&vfilter_Application=Demo_Earth_App%2CDemo_Jupiter_App%2CDemo_Mars_App%2CDemo_Mercury_App%2CDemo_Neptune_App%2CDemo_Saturn_App%2CDemo_Uranus_App%2CDemo_Venus_App%2CServiceCenter)\n * [2.1 Raw error data](https://pyw64053.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/df84f28d-d740-40cc-8c2c-fd4254dace5b#from=now-7d&to=now&vfilter_Error_Message=400+Bad+Request%3A+The+request+cannot+be+fulfilled+due+to+bad+syntax.&vfilter_Environment=DEMO&vfilter_Application=Demo_Earth_App)\n * [3.0 process overview dashboard](https://pyw64053.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/ce578588-438e-44a7-8d84-1c4a1ed4707b#vfilter_Application=Demo_Earth_App%2CDemo_Jupiter_App%2CDemo_Mars_App%2CDemo_Mercury_App%2CDemo_Neptune_App&vfilter_ProcessName=Demo_Earth_App_process&vfilter_Environment=DEMO&vfilter_Status=closed&from=now-24h&to=now)\n* [RUM Overview](https://pyw64053.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/ef89c44c-5e46-4806-ac10-cb1a303bf1ad#from=now-24h&to=now&vfilter_KPI=Duration&vfilter_Aggregate=Avg&vfilter_TimeShift=7&vfilter_AppName=My+web+application%2CKevercentrum+Demo+Shop)\n \n### With Dashboards, you can: \n* Query, visualize, and observe all your data stored in [Grail](https://www.dynatrace.com/support/help/shortlink/dynatrace-grail)﻿. \n* Write custom JavaScript with [ad-hoc functions](https://dt-url.net/developer-dashboards) to fetch external data. \n* Annotate all your visualizations with markdown to enrich them with context. \n* Add variables to filter your results and make your dashboard dynamic. \n\nLet’s start. "},"2":{"title":"","type":"markdown","content":"![](https://dt-cdn.net/images/marketecture-3340-7c3c612514.png)"}},"layouts":{"0":{"x":0,"y":0,"w":7,"h":4},"1":{"x":0,"y":4,"w":24,"h":9},"2":{"x":0,"y":13,"w":13,"h":10}}}
+{
+    "version": 11,
+    "variables": [],
+    "tiles": {
+        "0": {
+            "type": "markdown",
+            "title": "",
+            "content": "![Getting started - step 1](https://dotcontrol.com/media/lmocoiav/outsystems-logo.png)"
+        },
+        "1": {
+            "type": "markdown",
+            "title": "",
+            "content": "# Getting started with Outsystems monitoring\n\nWe have created ready-made examples for various Outsystems log dashboards. In addition to log monitoring, you can install the Dynatrace OneAgent on the frontend servers to track all [End2End transactions](https://<TENANTID>.apps.dynatrace.com/ui/apps/dynatrace.classic.frontend/#serviceflow;sci=APPLICATION-EA7C4B59F27D43EB;timeframe=custom1701843977582to1701851177582;gtf=-2h;gf=all), including all [DB calls](https://pyw64053.apps.dynatrace.com/ui/apps/dynatrace.classic.databases/ui/databases?gtf=-2h&gf=all&sorting=name%3Basc)\n\n \n * [1.0 Top findings dashboard](https://pyw64053.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/72cbfe82-1c6d-4dd5-8c71-0a9ab151edb3#from=now-24h&to=now&vfilter_Application=Demo_Earth_App%2CDemo_Jupiter_App%2CDemo_Saturn_App&vfilter_Environment=DEMO&vfilter_Tenant=DemoUsers%2CServiceCenter)\n * [2.0 Error trends dashboard](https://pyw64053.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/c49ebeca-3077-40cf-baae-803508696991#from=now-24h&to=now&vfilter_ErrorPattern=400+Bad+Request%3A+The+request+cannot+be+fulfilled+due+to+bad+syntax.%2C404+Not+Found%3A+The+requested+resource+could+not+be+found+on+the+server.%2C500+Internal+Server+Error%3A+An+unexpected+condition+was+encountered%2C+and+no+more+specific+message+is+suitable.%2C503+Service+Unavailable%3A+The+server+is+not+ready+to+handle+the+request.+Common+causes+are+a+server+that+is+down+for+maintenance+or+that+is+overloaded.%2C504+Gateway+Timeout%3A+The+server%2C+while+acting+as+a+gateway+or+proxy%2C+did+not+receive+a+timely+response+from+the+upstream+server+or+some+other+auxiliary+server.&vfilter_Environment=DEMO&vfilter_Application=Demo_Earth_App%2CDemo_Jupiter_App%2CDemo_Mars_App%2CDemo_Mercury_App%2CDemo_Neptune_App%2CDemo_Saturn_App%2CDemo_Uranus_App%2CDemo_Venus_App%2CServiceCenter)\n * [2.1 Raw error data](https://pyw64053.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/df84f28d-d740-40cc-8c2c-fd4254dace5b#from=now-7d&to=now&vfilter_Error_Message=400+Bad+Request%3A+The+request+cannot+be+fulfilled+due+to+bad+syntax.&vfilter_Environment=DEMO&vfilter_Application=Demo_Earth_App)\n * [3.0 process overview dashboard](https://pyw64053.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/ce578588-438e-44a7-8d84-1c4a1ed4707b#vfilter_Application=Demo_Earth_App%2CDemo_Jupiter_App%2CDemo_Mars_App%2CDemo_Mercury_App%2CDemo_Neptune_App&vfilter_ProcessName=Demo_Earth_App_process&vfilter_Environment=DEMO&vfilter_Status=closed&from=now-24h&to=now)\n* [RUM Overview](https://pyw64053.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/ef89c44c-5e46-4806-ac10-cb1a303bf1ad#from=now-24h&to=now&vfilter_KPI=Duration&vfilter_Aggregate=Avg&vfilter_TimeShift=7&vfilter_AppName=My+web+application%2CKevercentrum+Demo+Shop)\n \n### With Dashboards, you can: \n* Query, visualize, and observe all your data stored in [Grail](https://www.dynatrace.com/support/help/shortlink/dynatrace-grail)﻿. \n* Write custom JavaScript with [ad-hoc functions](https://dt-url.net/developer-dashboards) to fetch external data. \n* Annotate all your visualizations with markdown to enrich them with context. \n* Add variables to filter your results and make your dashboard dynamic. \n\nLet’s start. "
+        },
+        "2": {
+            "title": "",
+            "type": "markdown",
+            "content": "![](https://dt-cdn.net/images/marketecture-3340-7c3c612514.png)"
+        }
+    },
+    "layouts": {
+        "0": {
+            "x": 0,
+            "y": 0,
+            "w": 7,
+            "h": 4
+        },
+        "1": {
+            "x": 0,
+            "y": 4,
+            "w": 24,
+            "h": 9
+        },
+        "2": {
+            "x": 0,
+            "y": 13,
+            "w": 13,
+            "h": 10
+        }
+    }
+}

@@ -1,1 +1,293 @@
-{"version":11,"variables":[{"key":"Application","type":"query","input":"fetch logs\n| filterOut application_name == \"\"\n| sort application_name asc\n| summarize collectDistinct(application_name)","multiple":true},{"key":"ErrorPattern","type":"query","input":"fetch logs\n| filter message_type == \"Error\"\n| sort error_message asc\n| summarize collectDistinct(error_message)\n","multiple":true},{"key":"Environment","type":"query","input":"fetch logs //, scanLimitGBytes: 500, samplingRatio: 1000\n| fieldsAdd strTenant=toString(environment_name)\n| sort strTenant asc\n| summarize collectDistinct(environment_name)","multiple":true}],"tiles":{"0":{"type":"markdown","title":"","content":"### Error Pattern trend\n> by Application / Pattern / Environment"},"2":{"type":"markdown","title":"","content":"***The filters above are filtering the available data from the Events database. Selecting one filter does not impact the content of another filter.***"},"4":{"type":"data","title":"Errors over time per application - Top 10","query":"fetch logs //, scanLimitGBytes: 500, samplingRatio: 1000\n| filter message_type == \"Error\"\n| filter in(application_name, $Application) \n| filter in(environment_name, $Environment) \n| filter in(error_message, $ErrorPattern) \n| summarize countDistinct(id), by: {application_name, bin(toTimestamp(instant), 10m)}\n| filter application_name in [\n  fetch logs //, scanLimitGBytes: 500, samplingRatio: 1000\n  | filter message_type == \"Error\"\n  | filter in(application_name, $Application) \n  | summarize Count = countDistinct(id), by: {application_name}\n  | sort Count desc\n  | limit 10\n  | fieldsKeep application_name\n]\n","visualization":"barChart","visualizationSettings":{"thresholds":[],"chartSettings":{"gapPolicy":"connect","circleChartSettings":{"groupingThresholdType":"relative","hideLabels":false,"groupingThresholdValue":null},"categoryOverrides":{},"categoricalBarChartSettings":{"categoryAxis":"concat(application_name)","categoryAxisLabel":"concat(application_name)","valueAxis":"Count","valueAxisLabel":"Count"},"colorPalette":"categorical","legend":{"position":"bottom","hidden":false},"leftYAxisSettings":{"scale":"linear"},"valueRepresentation":"absolute","fieldMapping":{"timestamp":"bin(toTimestamp(instant), 10m)","fields":["application_name"],"values":["countDistinct(id)"]}},"singleValue":{"showLabel":true,"label":"","prefixIcon":"","autoscale":true,"alignment":"center"},"table":{"rowDensity":"condensed","enableLineWrap":true,"enableSparklines":false,"hiddenColumns":[],"lineWrapIds":[["concat(application_name, \" | \", error_message)"]],"columnWidths":{}}}},"5":{"type":"data","title":"Top 15 errors","query":"fetch logs //, scanLimitGBytes: 500, samplingRatio: 1000\n| filter message_type == \"Error\"\n| summarize Count = countDistinct(id), by: {error_message,application_name, environment_name}\n| fieldsAdd link = concat(\"https://pyw64053.apps.dynatrace.com//ui/apps/dynatrace.dashboards/dashboard/1dc9d91e-8b78-4ce0-b75f-9ea145ce3a1a/edit/tile/0/main/0,0#vfilter_Environment=\",environment_name,\"&vfilter_Application=\",application_name,\"&vfilter_Error_Message=\",error_message)\n| sort Count desc\n|limit 15\n//| fields count, timestamp\n//| sort timestamp asc\n","visualization":"table","visualizationSettings":{"thresholds":[],"chartSettings":{"gapPolicy":"connect","circleChartSettings":{"groupingThresholdType":"absolute","hideLabels":false,"groupingThresholdValue":null},"categoryOverrides":{},"categoricalBarChartSettings":{"categoryAxis":"error_message","categoryAxisLabel":"error_message","valueAxis":"Count","valueAxisLabel":"Count"},"colorPalette":"categorical"},"singleValue":{"showLabel":true,"label":"","prefixIcon":"","autoscale":true,"alignment":"center"},"table":{"rowDensity":"condensed","enableLineWrap":true,"enableSparklines":false,"hiddenColumns":[],"lineWrapIds":[["concat(application_name, \" | \", error_message)"]],"columnWidths":{"[\"error_message\"]":600,"[\"application_name\"]":162.796875,"[\"environment_name\"]":173.0625,"[\"Count\"]":149.515625,"[\"link\"]":600}}}},"6":{"type":"data","title":"Error ratio per application","query":"fetch logs //, scanLimitGBytes: 500, samplingRatio: 1000\n| filter message_type == \"Error\"\n| filter in(application_name, $Application) \n| filter in(environment_name, $Environment) \n| filter in(error_message, $ErrorPattern) \n| summarize Count = countDistinct(id), by: {application_name}\n\n//| fields count, timestamp\n//| sort timestamp asc","visualization":"pieChart","visualizationSettings":{"thresholds":[],"chartSettings":{"gapPolicy":"connect","circleChartSettings":{"groupingThresholdType":"relative","hideLabels":false,"groupingThresholdValue":null},"categoryOverrides":{},"categoricalBarChartSettings":{"categoryAxis":"application_name","categoryAxisLabel":"application_name","valueAxis":"Count","valueAxisLabel":"Count"},"colorPalette":"categorical","legend":{"position":"right","hidden":false}},"singleValue":{"showLabel":true,"label":"","prefixIcon":"","autoscale":true,"alignment":"center"},"table":{"rowDensity":"condensed","enableLineWrap":true,"enableSparklines":false,"hiddenColumns":[],"lineWrapIds":[["concat(application_name, \" | \", error_message)"]],"columnWidths":{}}}},"7":{"type":"data","title":"30 days Error trend per application ","query":"fetch logs, from:now()-30d, to:now()\n| filter message_type == \"Error\"\n| summarize countDistinct(id), by: {application_name, bin(toTimestamp(instant), 24h)}\n//| makeTimeseries count(), by: {application_name}\n","visualization":"areaChart","visualizationSettings":{"thresholds":[],"chartSettings":{"gapPolicy":"connect","circleChartSettings":{"groupingThresholdType":"relative","hideLabels":false,"groupingThresholdValue":null},"categoryOverrides":{},"categoricalBarChartSettings":{"categoryAxis":"concat(application_name)","categoryAxisLabel":"concat(application_name)","valueAxis":"Count","valueAxisLabel":"Count"},"colorPalette":"categorical","legend":{"position":"bottom","hidden":false},"leftYAxisSettings":{"scale":"linear"},"valueRepresentation":"absolute","fieldMapping":{"timestamp":"bin(toTimestamp(instant), 24h)","fields":["application_name"],"values":["countDistinct(id)"]}},"singleValue":{"showLabel":true,"label":"","prefixIcon":"","autoscale":true,"alignment":"center"},"table":{"rowDensity":"condensed","enableLineWrap":true,"enableSparklines":false,"hiddenColumns":[],"lineWrapIds":[["concat(application_name, \" | \", error_message)"]],"columnWidths":{}}}}},"layouts":{"0":{"x":0,"y":1,"w":24,"h":2},"2":{"x":0,"y":0,"w":23,"h":1},"4":{"x":0,"y":3,"w":13,"h":9},"5":{"x":0,"y":12,"w":24,"h":9},"6":{"x":13,"y":3,"w":11,"h":9},"7":{"x":0,"y":21,"w":24,"h":8}}}
+{
+    "version": 11,
+    "variables": [
+        {
+            "key": "Application",
+            "type": "query",
+            "input": "fetch logs\n| filterOut application_name == \"\"\n| sort application_name asc\n| summarize collectDistinct(application_name)",
+            "multiple": true
+        },
+        {
+            "key": "ErrorPattern",
+            "type": "query",
+            "input": "fetch logs\n| filter message_type == \"Error\"\n| sort error_message asc\n| summarize collectDistinct(error_message)\n",
+            "multiple": true
+        },
+        {
+            "key": "Environment",
+            "type": "query",
+            "input": "fetch logs //, scanLimitGBytes: 500, samplingRatio: 1000\n| fieldsAdd strTenant=toString(environment_name)\n| sort strTenant asc\n| summarize collectDistinct(environment_name)",
+            "multiple": true
+        }
+    ],
+    "tiles": {
+        "0": {
+            "type": "markdown",
+            "title": "",
+            "content": "### Error Pattern trend\n> by Application / Pattern / Environment"
+        },
+        "2": {
+            "type": "markdown",
+            "title": "",
+            "content": "***The filters above are filtering the available data from the Events database. Selecting one filter does not impact the content of another filter.***"
+        },
+        "4": {
+            "type": "data",
+            "title": "Errors over time per application - Top 10",
+            "query": "fetch logs //, scanLimitGBytes: 500, samplingRatio: 1000\n| filter message_type == \"Error\"\n| filter in(application_name, $Application) \n| filter in(environment_name, $Environment) \n| filter in(error_message, $ErrorPattern) \n| summarize countDistinct(id), by: {application_name, bin(toTimestamp(instant), 10m)}\n| filter application_name in [\n  fetch logs //, scanLimitGBytes: 500, samplingRatio: 1000\n  | filter message_type == \"Error\"\n  | filter in(application_name, $Application) \n  | summarize Count = countDistinct(id), by: {application_name}\n  | sort Count desc\n  | limit 10\n  | fieldsKeep application_name\n]\n",
+            "visualization": "barChart",
+            "visualizationSettings": {
+                "thresholds": [],
+                "chartSettings": {
+                    "gapPolicy": "connect",
+                    "circleChartSettings": {
+                        "groupingThresholdType": "relative",
+                        "hideLabels": false,
+                        "groupingThresholdValue": null
+                    },
+                    "categoryOverrides": {},
+                    "categoricalBarChartSettings": {
+                        "categoryAxis": "concat(application_name)",
+                        "categoryAxisLabel": "concat(application_name)",
+                        "valueAxis": "Count",
+                        "valueAxisLabel": "Count"
+                    },
+                    "colorPalette": "categorical",
+                    "legend": {
+                        "position": "bottom",
+                        "hidden": false
+                    },
+                    "leftYAxisSettings": {
+                        "scale": "linear"
+                    },
+                    "valueRepresentation": "absolute",
+                    "fieldMapping": {
+                        "timestamp": "bin(toTimestamp(instant), 10m)",
+                        "fields": [
+                            "application_name"
+                        ],
+                        "values": [
+                            "countDistinct(id)"
+                        ]
+                    }
+                },
+                "singleValue": {
+                    "showLabel": true,
+                    "label": "",
+                    "prefixIcon": "",
+                    "autoscale": true,
+                    "alignment": "center"
+                },
+                "table": {
+                    "rowDensity": "condensed",
+                    "enableLineWrap": true,
+                    "enableSparklines": false,
+                    "hiddenColumns": [],
+                    "lineWrapIds": [
+                        [
+                            "concat(application_name, \" | \", error_message)"
+                        ]
+                    ],
+                    "columnWidths": {}
+                }
+            }
+        },
+        "5": {
+            "type": "data",
+            "title": "Top 15 errors",
+            "query": "fetch logs //, scanLimitGBytes: 500, samplingRatio: 1000\n| filter message_type == \"Error\"\n| summarize Count = countDistinct(id), by: {error_message,application_name, environment_name}\n| fieldsAdd link = concat(\"https://TENANTID.apps.dynatrace.com//ui/apps/dynatrace.dashboards/dashboard/1dc9d91e-8b78-4ce0-b75f-9ea145ce3a1a/edit/tile/0/main/0,0#vfilter_Environment=\",encodeUrl(environment_name),\"&vfilter_Application=\",encodeUrl(application_name),\"&vfilter_Error_Message=\",encodeUrl(error_message))\n| sort Count desc\n|limit 15\n//| fields count, timestamp\n//| sort timestamp asc\n",
+            "visualization": "table",
+            "visualizationSettings": {
+                "thresholds": [],
+                "chartSettings": {
+                    "gapPolicy": "connect",
+                    "circleChartSettings": {
+                        "groupingThresholdType": "absolute",
+                        "hideLabels": false,
+                        "groupingThresholdValue": null
+                    },
+                    "categoryOverrides": {},
+                    "categoricalBarChartSettings": {
+                        "categoryAxis": "error_message",
+                        "categoryAxisLabel": "error_message",
+                        "valueAxis": "Count",
+                        "valueAxisLabel": "Count"
+                    },
+                    "colorPalette": "categorical"
+                },
+                "singleValue": {
+                    "showLabel": true,
+                    "label": "",
+                    "prefixIcon": "",
+                    "autoscale": true,
+                    "alignment": "center"
+                },
+                "table": {
+                    "rowDensity": "condensed",
+                    "enableLineWrap": true,
+                    "enableSparklines": false,
+                    "hiddenColumns": [],
+                    "lineWrapIds": [
+                        [
+                            "concat(application_name, \" | \", error_message)"
+                        ]
+                    ],
+                    "columnWidths": {
+                        "[\"error_message\"]": 600,
+                        "[\"application_name\"]": 162.796875,
+                        "[\"environment_name\"]": 173.0625,
+                        "[\"Count\"]": 149.515625,
+                        "[\"link\"]": 600
+                    }
+                }
+            }
+        },
+        "6": {
+            "type": "data",
+            "title": "Error ratio per application",
+            "query": "fetch logs //, scanLimitGBytes: 500, samplingRatio: 1000\n| filter message_type == \"Error\"\n| filter in(application_name, $Application) \n| filter in(environment_name, $Environment) \n| filter in(error_message, $ErrorPattern) \n| summarize Count = countDistinct(id), by: {application_name}\n\n//| fields count, timestamp\n//| sort timestamp asc",
+            "visualization": "pieChart",
+            "visualizationSettings": {
+                "thresholds": [],
+                "chartSettings": {
+                    "gapPolicy": "connect",
+                    "circleChartSettings": {
+                        "groupingThresholdType": "relative",
+                        "hideLabels": false,
+                        "groupingThresholdValue": null
+                    },
+                    "categoryOverrides": {},
+                    "categoricalBarChartSettings": {
+                        "categoryAxis": "application_name",
+                        "categoryAxisLabel": "application_name",
+                        "valueAxis": "Count",
+                        "valueAxisLabel": "Count"
+                    },
+                    "colorPalette": "categorical",
+                    "legend": {
+                        "position": "right",
+                        "hidden": false
+                    }
+                },
+                "singleValue": {
+                    "showLabel": true,
+                    "label": "",
+                    "prefixIcon": "",
+                    "autoscale": true,
+                    "alignment": "center"
+                },
+                "table": {
+                    "rowDensity": "condensed",
+                    "enableLineWrap": true,
+                    "enableSparklines": false,
+                    "hiddenColumns": [],
+                    "lineWrapIds": [
+                        [
+                            "concat(application_name, \" | \", error_message)"
+                        ]
+                    ],
+                    "columnWidths": {}
+                }
+            }
+        },
+        "7": {
+            "type": "data",
+            "title": "30 days Error trend per application ",
+            "query": "fetch logs, from:now()-30d, to:now()\n| filter message_type == \"Error\"\n| summarize countDistinct(id), by: {application_name, bin(toTimestamp(instant), 24h)}\n//| makeTimeseries count(), by: {application_name}\n",
+            "visualization": "areaChart",
+            "visualizationSettings": {
+                "thresholds": [],
+                "chartSettings": {
+                    "gapPolicy": "connect",
+                    "circleChartSettings": {
+                        "groupingThresholdType": "relative",
+                        "hideLabels": false,
+                        "groupingThresholdValue": null
+                    },
+                    "categoryOverrides": {},
+                    "categoricalBarChartSettings": {
+                        "categoryAxis": "concat(application_name)",
+                        "categoryAxisLabel": "concat(application_name)",
+                        "valueAxis": "Count",
+                        "valueAxisLabel": "Count"
+                    },
+                    "colorPalette": "categorical",
+                    "legend": {
+                        "position": "bottom",
+                        "hidden": false
+                    },
+                    "leftYAxisSettings": {
+                        "scale": "linear"
+                    },
+                    "valueRepresentation": "absolute",
+                    "fieldMapping": {
+                        "timestamp": "bin(toTimestamp(instant), 24h)",
+                        "fields": [
+                            "application_name"
+                        ],
+                        "values": [
+                            "countDistinct(id)"
+                        ]
+                    }
+                },
+                "singleValue": {
+                    "showLabel": true,
+                    "label": "",
+                    "prefixIcon": "",
+                    "autoscale": true,
+                    "alignment": "center"
+                },
+                "table": {
+                    "rowDensity": "condensed",
+                    "enableLineWrap": true,
+                    "enableSparklines": false,
+                    "hiddenColumns": [],
+                    "lineWrapIds": [
+                        [
+                            "concat(application_name, \" | \", error_message)"
+                        ]
+                    ],
+                    "columnWidths": {}
+                }
+            }
+        }
+    },
+    "layouts": {
+        "0": {
+            "x": 0,
+            "y": 1,
+            "w": 24,
+            "h": 2
+        },
+        "2": {
+            "x": 0,
+            "y": 0,
+            "w": 23,
+            "h": 1
+        },
+        "4": {
+            "x": 0,
+            "y": 3,
+            "w": 13,
+            "h": 9
+        },
+        "5": {
+            "x": 0,
+            "y": 12,
+            "w": 24,
+            "h": 9
+        },
+        "6": {
+            "x": 13,
+            "y": 3,
+            "w": 11,
+            "h": 9
+        },
+        "7": {
+            "x": 0,
+            "y": 21,
+            "w": 24,
+            "h": 8
+        }
+    }
+}
