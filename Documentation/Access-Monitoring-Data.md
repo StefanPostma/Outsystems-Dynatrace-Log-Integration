@@ -51,7 +51,7 @@ If the data volume is very high, we strongly recommend the usage of a replica of
 * Not suited for a high data volume extraction
     > :exclamation: Don't use this approach if you need to get more than 15000 records per minute.
 
-## Using OpenTelementry stream
+## Using OpenTelemetry stream - Log Streaming
 
 ### Advantages
 * Easier to implement: Just setup the token and authentication.
