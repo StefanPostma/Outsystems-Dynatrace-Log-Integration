@@ -162,6 +162,8 @@ For anyone migrating existing dashboards or notebooks built on the old Logstash 
 | `module_name` | `outsystems.module.name` |
 | `module_name == "SLOWSQL"` | `outsystems.log.message.tag == "SLOWSQL"` |
 | `outsystems.request.slowquery.query.duration.ms` | `outsystems.request.duration` |
+| `outsystems.request.slowquery.query` (tenant-side processing rule) | `outsystems.log.message.object` |
+| `server` as dashboard Host column | `coalesce(host.name, outsystems.cloud.infrastructure_orn)` — self-managed sends `host.name`, OutSystems Cloud streaming sends the infrastructure ORN |
 | `action_name` | `code.function` |
 | `duration` | `outsystems.request.duration` |
 | `process_*` (BPT dashboards) | `outsystems.process.*` |

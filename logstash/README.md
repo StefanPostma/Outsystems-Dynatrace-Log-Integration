@@ -7,6 +7,12 @@
 ## About
 These Logstash accelerators are in fact data pipelines that fetch monitoring data from an OutSystems environment, make a few transformations and enrichments, and load the OutSystems monitoring data into Dynatrace. 
 
+> 📐 **OTEL field alignment:** these pipelines emit the same attribute names as native [OutSystems 11 log streaming](../log-streaming/) (`outsystems.log.type`, `outsystems.app.name`, `outsystems.request.duration`, ...). The contract is [Documentation/OTEL-Field-Mapping.md](../Documentation/OTEL-Field-Mapping.md), and the dashboards in [dashboards/](dashboards/) are aligned with the log-streaming ones.
+>
+> ⚠️ **Breaking change (2026-09):** field names changed from the old ECS-style names (`application.name`, `message_content.text`, `log.data_source`, ...) to the OTEL standard. If you upgrade an existing installation, import the new dashboards from [dashboards/](dashboards/) — dashboards built on the old names will not match new data. The old-to-new rename table is at the bottom of the field mapping document.
+
+For OutSystems 11.23.1+ we recommend native [log streaming](../log-streaming/) instead of Logstash.
+
 This is possible, for now, using one of 3 ways:
 1. Getting the OutSystems monitoring data directly from OutSystems logs tables of each environment through direct query (for now only usable for Microsoft SQL RDBMSs);
 2. Getting the monitoring data by using the built-in [OutSystems Performance Monitoring API](https://success.outsystems.com/Documentation/11/Reference/OutSystems_APIs/PerformanceMonitoring_API);
@@ -16,8 +22,8 @@ This is possible, for now, using one of 3 ways:
 ## Configure Logstash 
 
 ⚠️ **Important Note(s)**
-* Before these steps, you need assure you already [installed Logstash](/data_extraction/README.md)
-* And you already configured and/or updated the needed [Logastash plugins](/data_extraction/README.md#other-plugins-that-might-be-needed)
+* Before these steps, you need assure you already [installed Logstash](INSTALL.md)
+* And you already configured and/or updated the needed [Logstash plugins](INSTALL.md#other-plugins-that-might-be-needed)
 
 1. Read this readme fully
 2. Stop the Logstash service
@@ -43,7 +49,7 @@ example command: `sudo cp logstash-config.txt /etc/default/logstash`
 <br>
 
 ## 4. Copy the pipeline config file you need
-check the [Pipeline](Logstash/pipelines) folder for the pipeline config you need.
+check the [Pipeline](pipelines) folder for the pipeline config you need.
 Check the `/etc/logstash/pipelines.yml` file for the location of your config files.
 Copy the config files to the location.
 <br>
@@ -68,7 +74,7 @@ where `<logstash_pipelines_folder>` is the folder where you've placed the pipeli
 <br>
 
 ## 6 Copy the pattern file
-Copy the [pattern file](/data_extraction/Logstash/patterns) from this Repro to the location you specified in your logstash config (PATTERNS_DIR="") in step 3
+Copy the [pattern file](patterns) from this Repro to the location you specified in your logstash config (PATTERNS_DIR="") in step 3
 <br>
 
 

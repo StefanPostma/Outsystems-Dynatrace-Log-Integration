@@ -1,94 +1,51 @@
-# Outsystems Dynatrace Log Integration
+# OutSystems ↔ Dynatrace Log Integration
 
 ## About 📑
-This repository contains templates to provide better and faster insights on top of [OutSystems](https://www.outsystems.com/) monitoring data.
+This repository contains templates to provide better and faster insights on top of [OutSystems](https://www.outsystems.com/) monitoring data in [Dynatrace](https://www.dynatrace.com/).
 
-These templates are seperated into :
-- **Documentation**
-    - Explaination of different ways to [extract data](Documentation/Access-Monitoring-Data.md) out of Outsystems 
-    - Different types of [monitoring data](Documentation/Monitoring-Data.md) provided by Dynatrace Agents and Outsystems 
-- **Logstash pipelines**
-    :exclamation: For Outsystems 11 we advice to use [log streaming](https://success.outsystems.com/documentation/11/managing_the_applications_lifecycle/monitor_and_troubleshoot/introduction_to_log_streaming/) instead of Logstash
-    - Simplify the ETL of monitoring data from the OutSystems platform.
-    - Enrich data to allow building more human-readable visualizations.
-- **Dynatrace dashboards**
-    - Provide an out-of-the-box set of visualizations that help understand OutSystems applications and platform health, based on their performance and errors.
-    - Reduce time to insights (based on OutSystems monitoring data).
-    - Improve troubleshooting capabilities.
+There are **two clearly separated ingestion tracks**, and both produce the **same OTEL-standard field names** in Dynatrace, so the dashboards are aligned and interchangeable:
 
-<br>
+| | [`log-streaming/`](log-streaming/) | [`logstash/`](logstash/) |
+|---|---|---|
+| **What** | Native OutSystems 11 [log streaming](https://success.outsystems.com/documentation/11/monitoring_and_troubleshooting_apps/introduction_to_log_streaming/) (OTLP over HTTP/gRPC) | Logstash pipelines pulling from the OutSystems log database or the MonitorProbe API |
+| **For** | **Recommended** for OutSystems 11.23.1+ | O11 versions without streaming, or setups needing DB-level extras (BPT processes, web references) |
+| **Managed by** | OutSystems platform (LifeTime) | You (self-hosted Logstash) |
+| **Field names** | OutSystems OTEL standard | Same OTEL standard — see the [field mapping](Documentation/OTEL-Field-Mapping.md) |
 
-Examples of the visualizations available on this repository:
-[Images](Dashboards/Images)
+> 📐 **The alignment contract:** [Documentation/OTEL-Field-Mapping.md](Documentation/OTEL-Field-Mapping.md) defines the canonical attribute names both tracks must emit. Change that file first, everything else follows it.
 
-<br>
+## Repository layout
 
-:exclamation: To know how to set up and use this repository artifacts you can go directly to the this section [How to use the contents of this repository](#how-to-use-the-contents-of-this-repository)
-
-:exclamation: **Want to support to implement or extend this assets?**
-Contact Dynatrace Professional Services. You can know more about us at:
-https://www.dynatrace.com/services-support/#dynatrace-services/ 
-  
-<br>
+- **[`log-streaming/`](log-streaming/)** — setup guide + Dynatrace Gen3 dashboards for the native OutSystems 11 log streaming track
+- **[`logstash/`](logstash/)** — Logstash install guide, pipeline configurations (database + MonitorProbe), and the same aligned dashboards plus Logstash-only extras (BPT Processes)
+- **[`shared/dashboards/`](shared/dashboards/)** — ingestion-independent dashboards (RUM Overview, demo landing page)
+- **[`Documentation/`](Documentation/)** — [field mapping](Documentation/OTEL-Field-Mapping.md), [how to access OutSystems monitoring data](Documentation/Access-Monitoring-Data.md), [monitoring data types](Documentation/Monitoring-Data.md), [dashboard screenshots](Documentation/images/)
+- **[`tools/demo-data/`](tools/demo-data/)** — generator that ingests synthetic OutSystems logs (canonical field names) into a Dynatrace tenant, to validate the dashboards without a live OutSystems environment
 
 ## Goal 🎯
-The major goal of these accelerators is to provide OutSystems customers with an out-of-the-box solution to:
-- Easily **observe the OutSystems monitoring data on Dynatrace with more advanced visualizations, Unified Observability and Easy automation**, compared to the cababilites from the built-in tools of the OutSystems platform.
-- Easily search through OutSystems monitoring data, in particular through the OutSystems logs with Dynatrace Query Lanquage (DQL)
-- Retain logs for up to 10 Years
-- **Do more advanced monitoring**, compared to what can be done using the built-in tools of the OutSystems platform. Things like:
-    - Build alerts for an OutSystems environment or OutSystems Factory.
-    - Leverage Dynatrace Davis AI capabilities to have deeper insights on performance and behavior of applications, and the platform itself.
-    - Build quality gates with Dynatrace Site Reliabilty Guardians
-    - Start automating releases driven by Dynatrace workflows
-    - Intergrate log data with Outsystems applications by levering Workflow API's
-- **Observe OutSystems applications performance and errors through time**.
-    - Quickly pinpoint performance bottlenecks, areas to improve, etc.
-    - Figure out what is affecting performance:
-        - Slow Queries
-        - Slow Integrations
-        - Slow Extensions
-- Provide an example of how to **set up and monitor SLOs**.
+Provide OutSystems customers with an out-of-the-box solution to:
+- **Observe OutSystems monitoring data in Dynatrace** with advanced visualizations, unified observability, and easy automation — beyond the built-in tools of the OutSystems platform
+- Search OutSystems logs with Dynatrace Query Language (DQL), with **one set of field names regardless of ingestion method**
+- Retain logs for up to 10 years
+- **Do more advanced monitoring**: alerts per environment or factory, Davis AI insights, Site Reliability Guardian quality gates, release automation with Dynatrace Workflows
+- **Track application performance and errors through time**: slow queries, slow integrations, slow extensions
+- Provide an example of how to set up and monitor SLOs
 
-<br> 
+## Getting started
 
-## Examples of metrics can you can extract
+1. No Dynatrace environment yet? [Start a trial](https://www.dynatrace.com/trial).
+2. Decide how to collect the data: [How to access OutSystems log data](Documentation/Access-Monitoring-Data.md)
+   - **OutSystems 11.23.1+** → use [log streaming](log-streaming/) (recommended)
+   - Otherwise → use the [Logstash track](logstash/)
+3. Import the dashboards of your track (they use the same fields either way).
+4. Optional: validate with [synthetic demo data](tools/demo-data/) before connecting a real environment.
 
-- **Request Time Duration** (for each request):
-    - Client Time (load time)
-    - Server Time, which can be decomposed into:
-        - SAT (Session Acquisition Time)
-        - Query Execution Time
-        - Integration Execution Time
-        - Extension Execution Time
-- **Server side performance metrics**
-    - Session size
-    - Viewstate size
-    - Number of slow queries
-    - Number of slow integrations
-    - Number of slow extensions
-- **Errors metrics**
-    - Number of errors
-    - Number of errors by type
+Example visualizations: [Documentation/images](Documentation/images)
 
-These are just examples of some metrics that can be monitored, based on the platform log data.
+**Want support to implement or extend these assets?** Contact [Dynatrace Professional Services](https://www.dynatrace.com/services-support/#dynatrace-services/).
 
-<br>
+## Examples of metrics you can extract
 
-## How to use the contents of this repository
-If you have do not have a Dynatrace environment yet, you can start a free trial today
-- [Open a Dynatrace trial](https://www.dynatrace.com/trial)
-
-If you are all set with your Dynatrace environment you can start to decide how you want to collect your data.
-- [How to access OutSystems log data](Documentation/Access-Monitoring-Data.md)
-
-If you like to proceed with using logstash please follow these steps: <br>
-1.0 [Installing Logstash](data_extraction/README.md). <br>
-2.0 [Configure Logstash](data_extraction/Logstash/README.md) 
-
-If you want to explore more deeply what you can take out of your OutSystems platform, you can refer to:
-- [Understanding monitoring data](documentation/Monitoring-Data.md).
-<br>
-
-## Change log
-See the change log to learn about the latest changes and improvements to this repository.
+- **Request time duration** (per request): client time, server time — decomposable into session acquisition time, query execution time, integration execution time, extension execution time
+- **Server-side performance**: session size, viewstate size, number of slow queries / integrations / extensions
+- **Errors**: number of errors, errors by type / application / environment

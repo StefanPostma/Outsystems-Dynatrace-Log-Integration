@@ -4,10 +4,10 @@
 
 With this Logstash configuration you can extract the OutSystems monitoring data by:
 * Pulling data directly from OutSystems DB, in particular from [Log Tables](https://success.outsystems.com/Documentation/11_x_platform/Managing_the_Applications_Lifecycle/Monitor_and_Troubleshoot/Logging_database_and_architecture)
-  * See more at: [Logstash data pipelines/ Database](Logstash/pipelines/database)
+  * See more at: [Logstash data pipelines/ Database](pipelines/database)
 * Pulling data through an OutSystem application that exposes the majority of the data was REST endpoints that then can be consumed.
   * The application it's available in [OutSystems Forge](https://www.outsystems.com/forge/), it's [Monitor Probe](https://www.outsystems.com/forge/component-overview/4559/monitorprobe)
-    * See more at: [Logstash data pipelines/Monitor Probe](Logstash/pipelines/monitor-probe)
+    * See more at: [Logstash data pipelines/Monitor Probe](pipelines/monitor-probe)
 
 Both approaches will work for Cloud and On-premises hosted Outsystems
 
@@ -15,7 +15,7 @@ Both approaches will work for Cloud and On-premises hosted Outsystems
 
 ## Ensuring Linux is up to date
 
-First of all, you should [make sure Linux is up to date](Ensuring-Linux-is-up-to-date.md).
+First of all, make sure your Linux system is up to date (e.g. `sudo apt update && sudo apt upgrade` or `sudo yum update`).
 
 ## Installing Logstash
 We recommend installing Logstash from the [package repository](https://www.elastic.co/guide/en/logstash/current/installing-logstash.html#package-repositories) following the latest approach for your system
