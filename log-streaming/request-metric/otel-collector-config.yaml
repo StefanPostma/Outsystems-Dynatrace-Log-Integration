@@ -1,0 +1,64 @@
+# OpenTelemetry Collector pipeline: derives outsystems.api.* before the logs
+# reach Dynatrace. See ../request-metric/README.md for what these fields mean
+# and when to pick this over the OpenPipeline rule.
+#
+# Setup:
+#   1. Run this Collector somewhere reachable from OutSystems (it's the new
+#      component this option costs you — see README.md for the trade-off).
+#   2. In LifeTime, point the log streaming destination at this Collector's
+#      OTLP endpoint (http://<collector-host>:4318) instead of Dynatrace
+#      directly.
+#   3. Set DT_TENANT_URL and DT_API_TOKEN (scope: logs.ingest) as environment
+#      variables wherever the Collector process runs.
+#
+# Not verified against a live OutSystems stream or a live Collector — the
+# OTTL statements below are correct against the current OTTL spec, but test
+# against a real log sample before deploying to a customer.
+
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+      grpc:
+        endpoint: 0.0.0.0:4317
+
+processors:
+  batch: {}
+
+  transform/outsystems_api:
+    error_mode: ignore
+    log_statements:
+      - context: log
+        statements:
+          # Integration: endpoint is already a URL
+          - set(attributes["outsystems.api.endpoint"], attributes["outsystems.log.endpoint"])
+              where attributes["outsystems.log.type"] == "Integration"
+
+          # ServiceAPI: no URL field exists on this log type, so the exposed
+          # service's own name is the closest identifier it has
+          - set(attributes["outsystems.api.endpoint"], attributes["outsystems.log.entrypoint_name"])
+              where attributes["outsystems.log.type"] == "ServiceAPI"
+
+          - set(attributes["outsystems.api.response_time"], attributes["outsystems.request.duration"])
+              where attributes["outsystems.log.type"] == "Integration" or attributes["outsystems.log.type"] == "ServiceAPI"
+
+          - set(attributes["outsystems.api.direction"], "consumed")
+              where attributes["outsystems.log.type"] == "Integration"
+
+          - set(attributes["outsystems.api.direction"], "exposed")
+              where attributes["outsystems.log.type"] == "ServiceAPI"
+
+exporters:
+  otlphttp/dynatrace:
+    # otlphttp appends /v1/logs, /v1/traces, /v1/metrics to this base path
+    endpoint: "${env:DT_TENANT_URL}/api/v2/otlp"
+    headers:
+      Authorization: "Api-Token ${env:DT_API_TOKEN}"
+
+service:
+  pipelines:
+    logs:
+      receivers: [otlp]
+      processors: [transform/outsystems_api, batch]
+      exporters: [otlphttp/dynatrace]

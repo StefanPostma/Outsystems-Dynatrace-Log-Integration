@@ -11,11 +11,17 @@ The OutSystems documentation writes attributes in Elastic notation (`log.attribu
 
 > ⚠️ **Verification note:** the connected demo tenant currently has no OutSystems data. Names marked *(verify)* were taken from dashboards previously built against a live streaming tenant, or are a best-effort choice where OutSystems documents nothing. Re-validate against a live tenant with `fetch logs | filter isNotNull(outsystems.log.type) | limit 10` and adjust here first — this file is the contract, everything else follows it.
 
-## Fields calculated by Dynatrace, not emitted by OutSystems
+## Derived fields: unified API traffic view
 
-`log-streaming/dashboards/3.0 Integrations.json` queries `outsystems.log.type == "Request"`, `outsystems.api.endpoint`, and `outsystems.api.response_time`. None of these are OutSystems-emitted — they were computed by a **Dynatrace log processing rule at ingest** in the tenant the dashboard was originally built against, deriving a unified request view from the raw request logs. That rule is tenant-side configuration, not part of this repository, so importing the dashboard elsewhere leaves those specific tiles empty until an equivalent rule (or pipeline-side calculation — see the roadmap note below) exists.
+Unlike every other field in this document, `outsystems.api.endpoint`, `outsystems.api.response_time` and `outsystems.api.direction` are **not emitted by OutSystems** — they're computed at ingest time from `Integration` and `ServiceAPI` records, so one field pair works for both consumed and exposed API calls instead of two type-specific ones. Full derivation logic, and three interchangeable ways to compute it (Logstash filter, Dynatrace OpenPipeline rule, OpenTelemetry Collector/OTTL), live in [log-streaming/request-metric/](../log-streaming/request-metric/).
 
-**Do not add these three names to the canonical table above** until the calculation is rebuilt as something this repo ships (a Logstash filter stage and a pre-ingest transform for the streaming track), at which point they get a real entry here with a defined source.
+| Field | Value | Present on |
+|---|---|---|
+| `outsystems.api.endpoint` | `Integration`: copy of `outsystems.log.endpoint` · `ServiceAPI`: copy of `outsystems.log.entrypoint_name` (this type has no URL endpoint) | `Integration`, `ServiceAPI` |
+| `outsystems.api.response_time` | copy of `outsystems.request.duration` | `Integration`, `ServiceAPI` |
+| `outsystems.api.direction` | `"consumed"` on `Integration`, `"exposed"` on `ServiceAPI` | `Integration`, `ServiceAPI` |
+
+`outsystems.log.type` is never overwritten to a synthetic value — an earlier version of `3.0 Integrations` queried `outsystems.log.type == "Request"`, which came from a one-off Dynatrace log processing rule configured by hand in a specific tenant, undocumented and not shipped anywhere in this repo. That value is retired; don't reintroduce it.
 
 ## Log type discriminator
 

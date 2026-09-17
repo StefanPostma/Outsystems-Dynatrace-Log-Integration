@@ -62,7 +62,7 @@
     },
     "3": {
       "type": "markdown",
-      "content": "### Top API endpoints — consumed & exposed\nRequires the outsystems.api.* fields — see [log-streaming/request-metric](../request-metric/README.md)\n"
+      "content": "### Top API endpoints — consumed & exposed\nRequires the outsystems.api.* fields — see [log-streaming/request-metric](../../log-streaming/request-metric/README.md)\n"
     },
     "4": {
       "type": "markdown",
@@ -74,12 +74,42 @@
     }
   },
   "layouts": {
-    "0": { "x": 0, "y": 1, "w": 23, "h": 5 },
-    "1": { "x": 0, "y": 7, "w": 23, "h": 6 },
-    "2": { "x": 0, "y": 14, "w": 23, "h": 6 },
-    "3": { "x": 0, "y": 0, "w": 19, "h": 1 },
-    "4": { "x": 0, "y": 6, "w": 19, "h": 1 },
-    "5": { "x": 0, "y": 13, "w": 19, "h": 1 }
+    "0": {
+      "x": 0,
+      "y": 1,
+      "w": 23,
+      "h": 5
+    },
+    "1": {
+      "x": 0,
+      "y": 7,
+      "w": 23,
+      "h": 6
+    },
+    "2": {
+      "x": 0,
+      "y": 14,
+      "w": 23,
+      "h": 6
+    },
+    "3": {
+      "x": 0,
+      "y": 0,
+      "w": 19,
+      "h": 1
+    },
+    "4": {
+      "x": 0,
+      "y": 6,
+      "w": 19,
+      "h": 1
+    },
+    "5": {
+      "x": 0,
+      "y": 13,
+      "w": 19,
+      "h": 1
+    }
   },
   "importedWithCode": false,
   "settings": {}
