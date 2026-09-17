@@ -11,6 +11,12 @@ The OutSystems documentation writes attributes in Elastic notation (`log.attribu
 
 > ⚠️ **Verification note:** the connected demo tenant currently has no OutSystems data. Names marked *(verify)* were taken from dashboards previously built against a live streaming tenant, or are a best-effort choice where OutSystems documents nothing. Re-validate against a live tenant with `fetch logs | filter isNotNull(outsystems.log.type) | limit 10` and adjust here first — this file is the contract, everything else follows it.
 
+## Fields calculated by Dynatrace, not emitted by OutSystems
+
+`log-streaming/dashboards/3.0 Integrations.json` queries `outsystems.log.type == "Request"`, `outsystems.api.endpoint`, and `outsystems.api.response_time`. None of these are OutSystems-emitted — they were computed by a **Dynatrace log processing rule at ingest** in the tenant the dashboard was originally built against, deriving a unified request view from the raw request logs. That rule is tenant-side configuration, not part of this repository, so importing the dashboard elsewhere leaves those specific tiles empty until an equivalent rule (or pipeline-side calculation — see the roadmap note below) exists.
+
+**Do not add these three names to the canonical table above** until the calculation is rebuilt as something this repo ships (a Logstash filter stage and a pre-ingest transform for the streaming track), at which point they get a real entry here with a defined source.
+
 ## Log type discriminator
 
 Every record carries `outsystems.log.type`. Canonical values:
