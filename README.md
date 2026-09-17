@@ -19,7 +19,7 @@ There are **two clearly separated ingestion tracks**, and both produce the **sam
 - **[`log-streaming/`](log-streaming/)** — setup guide + Dynatrace Gen3 dashboards for the native OutSystems 11 log streaming track, plus [derived-field options](log-streaming/request-metric/) (OpenPipeline rule or OTel Collector) for customers who need pre-ingest calculations
 - **[`logstash/`](logstash/)** — Logstash install guide, pipeline configurations (database + MonitorProbe), and the same aligned dashboards plus Logstash-only extras (BPT Processes)
 - **[`shared/dashboards/`](shared/dashboards/)** — ingestion-independent dashboards (RUM Overview, demo landing page)
-- **[`Documentation/`](Documentation/)** — [field mapping](Documentation/OTEL-Field-Mapping.md), [how to access OutSystems monitoring data](Documentation/Access-Monitoring-Data.md), [monitoring data types](Documentation/Monitoring-Data.md), [dashboard screenshots](Documentation/images/)
+- **[`Documentation/`](Documentation/)** — [field mapping](Documentation/OTEL-Field-Mapping.md), [RUM ↔ log correlation](Documentation/RUM-Log-Correlation.md), [how to access OutSystems monitoring data](Documentation/Access-Monitoring-Data.md), [monitoring data types](Documentation/Monitoring-Data.md), [dashboard screenshots](Documentation/images/)
 - **[`tools/demo-data/`](tools/demo-data/)** — generator that ingests synthetic OutSystems logs (canonical field names) into a Dynatrace tenant, to validate the dashboards without a live OutSystems environment
 
 ## Goal 🎯
