@@ -40,5 +40,6 @@ The [Logstash track](../logstash/) emits the **same names**, so these dashboards
 | 2.2 Error Deep Dive | Single-error investigation |
 | 3.0 Integrations | Integration endpoints: volume, response time, error rate |
 | 4.0 Request performance | Request-event based load-time analysis |
+| 5.0 Screen Session Health | Session/viewstate size (Good/Fair/Bad), AJAX vs full-screen access mode, size trend over time |
 
 No live OutSystems environment yet? Validate the dashboards with [`tools/demo-data/`](../tools/demo-data/).

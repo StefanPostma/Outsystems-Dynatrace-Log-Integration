@@ -1,0 +1,161 @@
+{
+  "version": 19,
+  "variables": [
+    {
+      "version": 2,
+      "key": "Application",
+      "type": "query",
+      "visible": true,
+      "editable": true,
+      "input": "fetch logs\n| filterOut outsystems.app.name == \"\"\n| sort outsystems.app.name asc\n| summarize collectDistinct(outsystems.app.name)",
+      "multiple": true
+    },
+    {
+      "version": 2,
+      "key": "Tenant",
+      "type": "query",
+      "visible": true,
+      "editable": true,
+      "input": "fetch logs\n| fieldsAdd strTenant=toString(outsystems.tenant.id)\n| sort strTenant asc\n| summarize collectDistinct(outsystems.tenant.id)",
+      "multiple": true
+    },
+    {
+      "version": 2,
+      "key": "Environment",
+      "type": "query",
+      "visible": true,
+      "editable": true,
+      "input": "fetch logs\n| fieldsAdd strTenant=toString(deployment.environment)\n| sort strTenant asc\n| summarize collectDistinct(deployment.environment)",
+      "multiple": true
+    }
+  ],
+  "tiles": {
+    "0": {
+      "type": "markdown",
+      "content": "### Session size by screen\nThresholds: 🟢 Good ≤ 4000 bytes · 🟡 Fair ≤ 5000 bytes · 🔴 Bad > 5000 bytes\n"
+    },
+    "1": {
+      "title": "",
+      "type": "data",
+      "query": "fetch logs\n| filter outsystems.log.type == \"Screen\"\n| filter in(outsystems.app.name, $Application)\n| filter in(deployment.environment, $Environment)\n| filter in(outsystems.tenant.id, $Tenant)\n| filter isNotNull(outsystems.traditional.ss)\n| summarize AvgSessionBytes = avg(toLong(outsystems.traditional.ss)), Count = count(), by: {Application = outsystems.app.name, Screen = outsystems.log.screen.name}\n| fieldsAdd SessionSizeClass = if(AvgSessionBytes <= 4000, \"🟢 Good\", else: if(AvgSessionBytes <= 5000, \"🟡 Fair\", else: \"🔴 Bad\"))\n| sort AvgSessionBytes desc\n| limit 20",
+      "visualization": "table",
+      "visualizationSettings": {
+        "thresholds": [],
+        "table": {
+          "columnOrder": [
+            "[\"Application\"]",
+            "[\"Screen\"]",
+            "[\"AvgSessionBytes\"]",
+            "[\"SessionSizeClass\"]",
+            "[\"Count\"]"
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 1,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      },
+      "davis": {}
+    },
+    "2": {
+      "type": "markdown",
+      "content": "### Viewstate size by screen\nThresholds: 🟢 Good ≤ 5000 bytes · 🟡 Fair ≤ 10000 bytes · 🔴 Bad > 10000 bytes\n"
+    },
+    "3": {
+      "title": "",
+      "type": "data",
+      "query": "fetch logs\n| filter outsystems.log.type == \"Screen\"\n| filter in(outsystems.app.name, $Application)\n| filter in(deployment.environment, $Environment)\n| filter in(outsystems.tenant.id, $Tenant)\n| filter isNotNull(outsystems.log.viewstate_bytes)\n| summarize AvgViewstateBytes = avg(toLong(outsystems.log.viewstate_bytes)), Count = count(), by: {Application = outsystems.app.name, Screen = outsystems.log.screen.name}\n| fieldsAdd ViewstateClass = if(AvgViewstateBytes <= 5000, \"🟢 Good\", else: if(AvgViewstateBytes <= 10000, \"🟡 Fair\", else: \"🔴 Bad\"))\n| sort AvgViewstateBytes desc\n| limit 20",
+      "visualization": "table",
+      "visualizationSettings": {
+        "thresholds": [],
+        "table": {
+          "columnOrder": [
+            "[\"Application\"]",
+            "[\"Screen\"]",
+            "[\"AvgViewstateBytes\"]",
+            "[\"ViewstateClass\"]",
+            "[\"Count\"]"
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 1,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      },
+      "davis": {}
+    },
+    "4": {
+      "type": "markdown",
+      "content": "### Access mode\nAJAX partial refreshes vs full-screen postbacks, by application\n"
+    },
+    "5": {
+      "title": "",
+      "type": "data",
+      "query": "fetch logs\n| filter outsystems.log.type == \"Screen\"\n| filter in(outsystems.app.name, $Application)\n| filter in(deployment.environment, $Environment)\n| filter in(outsystems.tenant.id, $Tenant)\n| summarize Count = count(), by: {Application = outsystems.app.name, AccessMode = outsystems.log.screen.access_mode}\n| sort Count desc\n| limit 20",
+      "visualization": "table",
+      "visualizationSettings": {
+        "thresholds": [],
+        "table": {
+          "columnOrder": [
+            "[\"Application\"]",
+            "[\"AccessMode\"]",
+            "[\"Count\"]"
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 1,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      },
+      "davis": {}
+    },
+    "6": {
+      "type": "markdown",
+      "content": "### Session & viewstate size over time\nWatch for upward drift — the classic \"why did this app get slower\" culprit\n"
+    },
+    "7": {
+      "title": "",
+      "type": "data",
+      "query": "fetch logs\n| filter outsystems.log.type == \"Screen\"\n| filter in(outsystems.app.name, $Application)\n| filter in(deployment.environment, $Environment)\n| filter in(outsystems.tenant.id, $Tenant)\n| makeTimeseries AvgSessionBytes = avg(toLong(outsystems.traditional.ss)), AvgViewstateBytes = avg(toLong(outsystems.log.viewstate_bytes)), time: timestamp",
+      "visualization": "areaChart",
+      "visualizationSettings": {
+        "thresholds": [],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "legend": {
+            "hidden": false
+          }
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 1,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      },
+      "davis": {}
+    }
+  },
+  "layouts": {
+    "0": { "x": 0, "y": 0, "w": 23, "h": 1 },
+    "1": { "x": 0, "y": 1, "w": 23, "h": 6 },
+    "2": { "x": 0, "y": 7, "w": 23, "h": 1 },
+    "3": { "x": 0, "y": 8, "w": 23, "h": 6 },
+    "4": { "x": 0, "y": 14, "w": 23, "h": 1 },
+    "5": { "x": 0, "y": 15, "w": 23, "h": 5 },
+    "6": { "x": 0, "y": 20, "w": 23, "h": 1 },
+    "7": { "x": 0, "y": 21, "w": 23, "h": 6 }
+  },
+  "importedWithCode": false,
+  "settings": {}
+}
