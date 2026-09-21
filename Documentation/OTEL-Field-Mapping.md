@@ -125,7 +125,7 @@ Every record carries `outsystems.log.type`. Canonical values:
 |---|---|---|
 | `Extension_Name` | `outsystems.code.function.owner` | |
 | `Extension_Id` | `outsystems.code.owner.function.id` | |
-| `Duration` | `outsystems.request.duration` | ⚠️ streaming sends **seconds** for extensions, Logstash DB values are **milliseconds** — verify per source |
+| `Duration` | `outsystems.request.duration` | **Seconds** — confirmed via [OutSystems 11 Log data reference](https://success.outsystems.com/Documentation/11/Managing_the_Applications_Lifecycle/Monitor_and_Troubleshoot/Logging_database_and_architecture/Log_data_reference) ("Time in seconds the extension call took"). `db-extension.conf` copies the raw `oslog_Extension.Duration` column verbatim, so it's seconds too — consistent with streaming. `app-extension.conf` (MonitorProbe) is unverified; MonitorProbe wraps the same table via its own REST API and could reformat the unit. |
 
 ## CyclicJob (timer)
 
@@ -133,7 +133,7 @@ Every record carries `outsystems.log.type`. Canonical values:
 |---|---|---|
 | `Cyclic_Job_Name` | `code.function` | |
 | `Cyclic_Job_Key` | `outsystems.code.function.key` | |
-| `Duration` | `outsystems.request.duration` | ⚠️ streaming sends **seconds** — see Extension note |
+| `Duration` | `outsystems.request.duration` | **Seconds** — same source confirms "Duration, in seconds, of the execution of the job." Same DB-vs-MonitorProbe caveat as Extension above. |
 | `Should_Have_Run_At` | `outsystems.timer.shouldhaverunat` | |
 | `Next_Run` | `outsystems.timer.nextrun` | |
 

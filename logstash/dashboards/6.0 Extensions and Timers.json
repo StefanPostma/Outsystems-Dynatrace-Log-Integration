@@ -1,0 +1,140 @@
+{
+  "version": 19,
+  "variables": [
+    {
+      "version": 2,
+      "key": "Application",
+      "type": "query",
+      "visible": true,
+      "editable": true,
+      "input": "fetch logs\n| filterOut outsystems.app.name == \"\"\n| sort outsystems.app.name asc\n| summarize collectDistinct(outsystems.app.name)",
+      "multiple": true
+    },
+    {
+      "version": 2,
+      "key": "Tenant",
+      "type": "query",
+      "visible": true,
+      "editable": true,
+      "input": "fetch logs\n| fieldsAdd strTenant=toString(outsystems.tenant.id)\n| sort strTenant asc\n| summarize collectDistinct(outsystems.tenant.id)",
+      "multiple": true
+    },
+    {
+      "version": 2,
+      "key": "Environment",
+      "type": "query",
+      "visible": true,
+      "editable": true,
+      "input": "fetch logs\n| fieldsAdd strTenant=toString(deployment.environment)\n| sort strTenant asc\n| summarize collectDistinct(deployment.environment)",
+      "multiple": true
+    }
+  ],
+  "tiles": {
+    "0": {
+      "type": "markdown",
+      "content": "⚠️ Extension/Timer duration is in **seconds** at the OutSystems source, confirmed for both log streaming and the Logstash `db-extension.conf`/`db-timer.conf` pipelines (they copy the raw DB column verbatim). The MonitorProbe-sourced pipelines (`app-extension.conf`/`app-timer.conf`) are **unverified** and may report a different unit — see [Documentation/OTEL-Field-Mapping.md](https://github.com/StefanPostma/Outsystems-Dynatrace-Log-Integration/blob/main/Documentation/OTEL-Field-Mapping.md#extension).\n"
+    },
+    "1": {
+      "type": "markdown",
+      "content": "### Slowest extensions\n"
+    },
+    "2": {
+      "title": "",
+      "type": "data",
+      "query": "fetch logs\n| filter outsystems.log.type == \"Extension\"\n| filter in(outsystems.app.name, $Application)\n| filter in(deployment.environment, $Environment)\n| filter in(outsystems.tenant.id, $Tenant)\n| filter isNotNull(outsystems.request.duration)\n| summarize AvgDuration = avg(toDouble(outsystems.request.duration) * 1s), MaxDuration = max(toDouble(outsystems.request.duration) * 1s), Count = count(), by: {Application = outsystems.app.name, Extension = outsystems.code.function.owner}\n| sort AvgDuration desc\n| limit 20",
+      "visualization": "table",
+      "visualizationSettings": {
+        "thresholds": [],
+        "table": {
+          "columnOrder": [
+            "[\"Application\"]",
+            "[\"Extension\"]",
+            "[\"AvgDuration\"]",
+            "[\"MaxDuration\"]",
+            "[\"Count\"]"
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 1,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      },
+      "davis": {}
+    },
+    "3": {
+      "type": "markdown",
+      "content": "### Timer execution duration\n"
+    },
+    "4": {
+      "title": "",
+      "type": "data",
+      "query": "fetch logs\n| filter outsystems.log.type == \"CyclicJob\"\n| filter in(outsystems.app.name, $Application)\n| filter in(deployment.environment, $Environment)\n| filter in(outsystems.tenant.id, $Tenant)\n| filter isNotNull(outsystems.request.duration)\n| summarize AvgDuration = avg(toDouble(outsystems.request.duration) * 1s), MaxDuration = max(toDouble(outsystems.request.duration) * 1s), Count = count(), by: {Application = outsystems.app.name, Timer = code.function}\n| sort AvgDuration desc\n| limit 20",
+      "visualization": "table",
+      "visualizationSettings": {
+        "thresholds": [],
+        "table": {
+          "columnOrder": [
+            "[\"Application\"]",
+            "[\"Timer\"]",
+            "[\"AvgDuration\"]",
+            "[\"MaxDuration\"]",
+            "[\"Count\"]"
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 1,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      },
+      "davis": {}
+    },
+    "5": {
+      "type": "markdown",
+      "content": "### Timer drift — scheduled vs. actual start\nPositive drift means the timer started later than scheduled\n"
+    },
+    "6": {
+      "title": "",
+      "type": "data",
+      "query": "fetch logs\n| filter outsystems.log.type == \"CyclicJob\"\n| filter in(outsystems.app.name, $Application)\n| filter in(deployment.environment, $Environment)\n| filter in(outsystems.tenant.id, $Tenant)\n| filter isNotNull(outsystems.timer.shouldhaverunat)\n| fieldsAdd ActualStart = timestamp - (toDouble(outsystems.request.duration) * 1s)\n| fieldsAdd Drift = ActualStart - toTimestamp(outsystems.timer.shouldhaverunat)\n| fields Application = outsystems.app.name, Timer = code.function, ScheduledAt = outsystems.timer.shouldhaverunat, ActualStart, Drift, NextRun = outsystems.timer.nextrun\n| sort Drift desc\n| limit 20",
+      "visualization": "table",
+      "visualizationSettings": {
+        "thresholds": [],
+        "table": {
+          "columnOrder": [
+            "[\"Application\"]",
+            "[\"Timer\"]",
+            "[\"ScheduledAt\"]",
+            "[\"ActualStart\"]",
+            "[\"Drift\"]",
+            "[\"NextRun\"]"
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 1,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      },
+      "davis": {}
+    }
+  },
+  "layouts": {
+    "0": { "x": 0, "y": 0, "w": 23, "h": 2 },
+    "1": { "x": 0, "y": 2, "w": 23, "h": 1 },
+    "2": { "x": 0, "y": 3, "w": 23, "h": 6 },
+    "3": { "x": 0, "y": 9, "w": 23, "h": 1 },
+    "4": { "x": 0, "y": 10, "w": 23, "h": 6 },
+    "5": { "x": 0, "y": 16, "w": 23, "h": 1 },
+    "6": { "x": 0, "y": 17, "w": 23, "h": 6 }
+  },
+  "importedWithCode": false,
+  "settings": {}
+}
