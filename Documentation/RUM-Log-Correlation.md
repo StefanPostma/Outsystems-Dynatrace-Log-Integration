@@ -15,7 +15,11 @@ Dynatrace has replaced classic RUM (USQL, a proprietary session store) with a Gr
 | Data objects | none queryable directly | `user.sessions`, `user.events`, `user.replays` |
 | Ingestion | fixed agent pipeline | OpenPipeline (`user.events:default`, `user.sessions:default`) — customizable |
 
-**This repo's `shared/dashboards/4.0 RUM Overview.json` is built entirely on the classic path** — it calls `rumUserSessionsClient.getUsqlResultAsTable()` from a code tile. That's deprecated by the new model and, more importantly, **cannot be joined against `outsystems.log.*` at all** — USQL results never enter Grail as rows. Migrating that dashboard to `fetch user.sessions` / `fetch user.events` is a prerequisite for any of the correlation work below, independent of what the customer decides next.
+**Update:** `shared/dashboards/4.0 RUM Overview.json` was migrated off classic USQL onto `user.sessions`/`user.events` DQL tiles. It previously called `rumUserSessionsClient.getUsqlResultAsTable()` from a code tile, which is deprecated by the new model and, more importantly, **could never be joined against `outsystems.log.*` at all** — USQL results never enter Grail as rows. That prerequisite for the correlation work below is now done.
+
+Two things worth knowing about that migration, both live-tested against a Dynatrace test tenant via `dtctl`:
+- **No stored Apdex field exists in the new model** (nor an "apdex" metric in that tenant's catalog) — the dashboard now computes satisfaction via duration-threshold bucketing on `user_action` events, with the threshold exposed as a new `$ApdexThreshold` variable instead of a hidden per-app Dynatrace setting.
+- **`timestamp` comes back null on `user.events`** (it only works on `user.sessions`) — the real time field there is `start_time`. This is easy to get wrong silently, since DQL doesn't error on a null-timestamp filter, it just quietly matches nothing.
 
 ## Verified schema (live queries, this tenant)
 
