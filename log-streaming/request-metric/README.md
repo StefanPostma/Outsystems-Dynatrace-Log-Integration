@@ -1,20 +1,22 @@
 # Unified API traffic view (`outsystems.api.*`)
 
-`3.0 Integrations` wants one field pair — an endpoint and a response time — that works across both **consumed** calls (`Integration` logs) and **exposed** calls (`ServiceAPI` logs). Neither log type shares a field name with the other, so this derives three extra attributes at ingest time:
+`3.0 Integrations` wants one field pair — an endpoint and a response time — that works across **consumed** calls (`Integration`, `WebReference`) and **exposed** calls (`ServiceAPI`). None of these log types share a field name with each other, so this derives three extra attributes at ingest time:
 
 | Field | Derived from | Present on |
 |---|---|---|
-| `outsystems.api.endpoint` | `Integration`: `outsystems.log.endpoint` · `ServiceAPI`: `outsystems.log.entrypoint_name` (ServiceAPI logs have no URL endpoint, only the exposed service's name) | `Integration`, `ServiceAPI` |
-| `outsystems.api.response_time` | `outsystems.request.duration` | `Integration`, `ServiceAPI` |
-| `outsystems.api.direction` | constant | `"consumed"` on `Integration`, `"exposed"` on `ServiceAPI` |
+| `outsystems.api.endpoint` | `Integration` / `WebReference`: `outsystems.log.endpoint` · `ServiceAPI`: `outsystems.log.entrypoint_name` (ServiceAPI logs have no URL endpoint, only the exposed service's name) | `Integration`, `ServiceAPI`, `WebReference` |
+| `outsystems.api.response_time` | `outsystems.request.duration` | `Integration`, `ServiceAPI`, `WebReference` |
+| `outsystems.api.direction` | constant | `"consumed"` on `Integration` and `WebReference`, `"exposed"` on `ServiceAPI` |
 
-These are **additions**, not replacements — `outsystems.log.type` stays `Integration` or `ServiceAPI` on every record. Dashboards that want the unified view filter `in(outsystems.log.type, "Integration", "ServiceAPI")` and read the `outsystems.api.*` fields; dashboards that want one direction only keep filtering on the single log type as before.
+These are **additions**, not replacements — `outsystems.log.type` stays `Integration`, `ServiceAPI` or `WebReference` on every record. Dashboards that want the unified view filter `in(outsystems.log.type, "Integration", "ServiceAPI", "WebReference")` and read the `outsystems.api.*` fields; dashboards that want one type only keep filtering on the single log type as before.
+
+> `WebReference` is Logstash-DB-only (`db-web-reference.conf`) — it has no log-streaming or MonitorProbe equivalent, so `logstash/dashboards/3.0 Integrations.json` includes it and `log-streaming/dashboards/3.0 Integrations.json` doesn't. That's the one place the two tracks' `3.0 Integrations` dashboards are allowed to genuinely differ — everything else stays query-identical.
 
 > This intentionally does **not** reproduce a `outsystems.log.type == "Request"` value some earlier dashboards queried against a specific tenant. That value was never part of the OutSystems-documented schema — see [Documentation/OTEL-Field-Mapping.md](../../Documentation/OTEL-Field-Mapping.md#derived-fields-unified-api-traffic-view). Reusing the real log type avoids colliding with the other tiles in `3.0 Integrations` that already filter on `"Integration"` directly.
 
 ## Logstash
 
-Already built in. See the `mutate { copy => ... }` block at the end of `db-integration.conf`, `app-integration.conf`, and `db-web-service.conf`. No further setup needed.
+Already built in. See the `mutate { copy => ... }` block at the end of `db-integration.conf`, `app-integration.conf`, `db-web-service.conf`, and `db-web-reference.conf`. No further setup needed.
 
 ## Log streaming (OTLP)
 

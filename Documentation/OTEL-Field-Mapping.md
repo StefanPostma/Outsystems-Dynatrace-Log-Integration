@@ -13,13 +13,15 @@ The OutSystems documentation writes attributes in Elastic notation (`log.attribu
 
 ## Derived fields: unified API traffic view
 
-Unlike every other field in this document, `outsystems.api.endpoint`, `outsystems.api.response_time` and `outsystems.api.direction` are **not emitted by OutSystems** — they're computed at ingest time from `Integration` and `ServiceAPI` records, so one field pair works for both consumed and exposed API calls instead of two type-specific ones. Full derivation logic, and three interchangeable ways to compute it (Logstash filter, Dynatrace OpenPipeline rule, OpenTelemetry Collector/OTTL), live in [log-streaming/request-metric/](../log-streaming/request-metric/).
+Unlike every other field in this document, `outsystems.api.endpoint`, `outsystems.api.response_time` and `outsystems.api.direction` are **not emitted by OutSystems** — they're computed at ingest time from `Integration`, `ServiceAPI` and `WebReference` records, so one field pair works across consumed and exposed API calls instead of three type-specific ones. Full derivation logic, and three interchangeable ways to compute it (Logstash filter, Dynatrace OpenPipeline rule, OpenTelemetry Collector/OTTL), live in [log-streaming/request-metric/](../log-streaming/request-metric/).
 
 | Field | Value | Present on |
 |---|---|---|
-| `outsystems.api.endpoint` | `Integration`: copy of `outsystems.log.endpoint` · `ServiceAPI`: copy of `outsystems.log.entrypoint_name` (this type has no URL endpoint) | `Integration`, `ServiceAPI` |
-| `outsystems.api.response_time` | copy of `outsystems.request.duration` | `Integration`, `ServiceAPI` |
-| `outsystems.api.direction` | `"consumed"` on `Integration`, `"exposed"` on `ServiceAPI` | `Integration`, `ServiceAPI` |
+| `outsystems.api.endpoint` | `Integration` / `WebReference`: copy of `outsystems.log.endpoint` · `ServiceAPI`: copy of `outsystems.log.entrypoint_name` (this type has no URL endpoint) | `Integration`, `ServiceAPI`, `WebReference` |
+| `outsystems.api.response_time` | copy of `outsystems.request.duration` | `Integration`, `ServiceAPI`, `WebReference` |
+| `outsystems.api.direction` | `"consumed"` on `Integration` and `WebReference`, `"exposed"` on `ServiceAPI` | `Integration`, `ServiceAPI`, `WebReference` |
+
+`WebReference` is Logstash-DB-only — no log-streaming or MonitorProbe equivalent exists — so it's the one place `logstash/dashboards/3.0 Integrations.json` and `log-streaming/dashboards/3.0 Integrations.json` are allowed to genuinely differ.
 
 `outsystems.log.type` is never overwritten to a synthetic value — an earlier version of `3.0 Integrations` queried `outsystems.log.type == "Request"`, which came from a one-off Dynatrace log processing rule configured by hand in a specific tenant, undocumented and not shipped anywhere in this repo. That value is retired; don't reintroduce it.
 

@@ -5,7 +5,7 @@
     "0": {
       "title": "",
       "type": "data",
-      "query": "fetch logs\n| filter in(outsystems.log.type, \"Integration\", \"ServiceAPI\")\n| filter isNotNull(outsystems.api.endpoint)\n| summarize Count = count(), by: {Endpoint = outsystems.api.endpoint, Direction = outsystems.api.direction}\n| sort Count desc\n| limit 10",
+      "query": "fetch logs\n| filter in(outsystems.log.type, \"Integration\", \"ServiceAPI\", \"WebReference\")\n| filter isNotNull(outsystems.api.endpoint)\n| summarize Count = count(), by: {Endpoint = outsystems.api.endpoint, Direction = outsystems.api.direction}\n| sort Count desc\n| limit 10",
       "visualization": "table",
       "visualizationSettings": {
         "table": {
@@ -29,7 +29,7 @@
     "1": {
       "title": "",
       "type": "data",
-      "query": "fetch logs\n| filter in(outsystems.log.type, \"Integration\", \"ServiceAPI\")\n| filter isNotNull(outsystems.api.endpoint)\n| summarize AvgResponseTime = avg(toLong(outsystems.api.response_time)), by: {Endpoint = outsystems.api.endpoint}\n| sort AvgResponseTime desc\n| limit 10",
+      "query": "fetch logs\n| filter in(outsystems.log.type, \"Integration\", \"ServiceAPI\", \"WebReference\")\n| filter isNotNull(outsystems.api.endpoint)\n| summarize AvgResponseTime = avg(toLong(outsystems.api.response_time)), by: {Endpoint = outsystems.api.endpoint}\n| sort AvgResponseTime desc\n| limit 10",
       "visualization": "table",
       "visualizationSettings": {
         "thresholds": []
@@ -46,7 +46,7 @@
     "2": {
       "title": "",
       "type": "data",
-      "query": "fetch logs\n| filter in(outsystems.log.type, \"Integration\", \"ServiceAPI\")\n| filter isNotNull(outsystems.api.endpoint)\n| summarize TotalCount = count(), ErrorCount = countIf(isNotNull(outsystems.log.error.uid)), by: {Endpoint = outsystems.api.endpoint}\n| fieldsAdd ErrorRate = round((ErrorCount / TotalCount) * 100, decimals:2)\n| filter ErrorCount > 0\n| sort ErrorRate desc\n| limit 10",
+      "query": "fetch logs\n| filter in(outsystems.log.type, \"Integration\", \"ServiceAPI\", \"WebReference\")\n| filter isNotNull(outsystems.api.endpoint)\n| summarize TotalCount = count(), ErrorCount = countIf(isNotNull(outsystems.log.error.uid)), by: {Endpoint = outsystems.api.endpoint}\n| fieldsAdd ErrorRate = round((ErrorCount / TotalCount) * 100, decimals:2)\n| filter ErrorCount > 0\n| sort ErrorRate desc\n| limit 10",
       "visualization": "table",
       "visualizationSettings": {
         "thresholds": []
@@ -62,7 +62,7 @@
     },
     "3": {
       "type": "markdown",
-      "content": "### Top API endpoints — consumed & exposed\nRequires the outsystems.api.* fields — see [log-streaming/request-metric](../../log-streaming/request-metric/README.md)\n"
+      "content": "### Top API endpoints — consumed & exposed\nCovers Integration, ServiceAPI and WebReference (Logstash only — WebReference has no log-streaming equivalent). Requires the outsystems.api.* fields — see [log-streaming/request-metric](../../log-streaming/request-metric/README.md)\n"
     },
     "4": {
       "type": "markdown",
