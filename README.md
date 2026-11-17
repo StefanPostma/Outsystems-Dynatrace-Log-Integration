@@ -1,5 +1,7 @@
 # OutSystems ↔ Dynatrace Log Integration
 
+<a href="https://buymeacoffee.com/stefanpostma"><img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=stefanpostma&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" alt="Buy me a coffee" height="36"></a>
+
 ## About 📑
 This repository contains templates to provide better and faster insights on top of [OutSystems](https://www.outsystems.com/) monitoring data in [Dynatrace](https://www.dynatrace.com/).
 
